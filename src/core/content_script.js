@@ -308,6 +308,6 @@ chrome.storage.sync.get('settings', (data) => {
       } catch (e) {
         console.error('genesyx-game-helper', e);
       }
-    }, { settings, timersTemplate });
+    }, {settings, timersTemplate});
   }
 });
