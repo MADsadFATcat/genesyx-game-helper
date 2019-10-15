@@ -1,0 +1,21 @@
+form[action*="MainForm.aspx"] div#divBody > table.frame {
+    display: none;
+}
+
+#genesyx-game-helper-endtired td, #genesyx-game-helper-custom td {
+    color: white;
+    cursor: pointer;
+    background-color: #00a8ff;
+}
+
+#genesyx-game-helper-timers {
+    position: absolute;
+    left: 120px;
+    top: 25px;
+}
+
+    #genesyx-game-helper-timers .not-btn {
+        cursor: auto;
+        color: white;
+        background-color: #2f2f2f;
+    }

@@ -1,0 +1,45 @@
+{
+  "name": "genesyx-game-helper",
+  "version": "2.0.4",
+  "private": true,
+  "scripts": {
+    "build": "vue-cli-service build && webpack --config webpack.config.js",
+    "patch": "npm version patch && node deploy/version.js",
+    "minor": "npm version minor && node deploy/version.js",
+    "major": "npm version major && node deploy/version.js",
+    "publish": "node deploy/publish.js",
+    "upload": "node deploy/upload.js",
+    "deploy": "npm run build && git add -A && git commit -m patch && npm run patch && npm run upload && npm run publish && git add -A && git commit -m deploy"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.25",
+    "@fortawesome/free-brands-svg-icons": "^5.11.2",
+    "@fortawesome/free-solid-svg-icons": "^5.11.2",
+    "@fortawesome/vue-fontawesome": "^0.1.7",
+    "core-js": "^2.6.5",
+    "vue": "^2.6.10",
+    "vue-class-component": "^7.0.2",
+    "vue-property-decorator": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.89",
+    "@vue/cli-plugin-babel": "^3.12.0",
+    "@vue/cli-plugin-typescript": "^3.12.0",
+    "@vue/cli-service": "^3.12.0",
+    "chrome-webstore-upload": "^0.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "dotenv": "^8.1.0",
+    "html-loader": "^0.5.5",
+    "jquery": "^3.4.1",
+    "json-loader": "^0.5.7",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.0",
+    "ts-loader": "^6.2.0",
+    "typescript": "^3.6.4",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.41.1",
+    "webpack-cli": "^3.3.9",
+    "zip-folder": "^1.0.0"
+  }
+}
