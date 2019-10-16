@@ -1,3 +1,4 @@
+import moment from 'moment';
 import timersTemplate from './timers.html';
 
 const currentUrl = document.location.href;
@@ -48,6 +49,20 @@ chrome.storage.sync.get('settings', (data) => {
       window.postMessage({type: 'genesyx-game-helper-popup', popup, title}, '*');
     };
   });
+
+  //хосты клансайту раз в сутки
+  if (document.location.href.indexOf('Genesyx.aspx') !== -1 || document.location.href.indexOf('Frames.aspx') !== -1) {
+    const date = localStorage.getItem('genesyx-helper-counters-date');
+    const today = moment().format('YYYY-DD-MM');
+    if (!date || date !== today) {
+      localStorage.setItem('genesyx-helper-counters-date', today);
+      const counters = document.createElement("iframe");
+      counters.style.position = "absolute";
+      counters.style.display = "none";
+      counters.src = 'https://evolution-genesyx.ml/';
+      document.body.appendChild(counters);
+    }
+  }
 
   //перегрузить вкладки с игрой при изменении настроек
   if (currentUrl.lastIndexOf('Genesyx.aspx') !== -1) {

@@ -31,11 +31,8 @@ function reloadTabsWithGame() {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.clear(() => {
     console.log('storage local cleared');
-    chrome.storage.sync.clear(() => {
-      console.log('storage sync cleared');
-      createSettingsIfNotExist(() => {
-        reloadTabsWithGame();
-      });
+    createSettingsIfNotExist(() => {
+      reloadTabsWithGame();
     });
   });
 });
