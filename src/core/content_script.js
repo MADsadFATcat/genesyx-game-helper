@@ -53,7 +53,7 @@ chrome.storage.sync.get('settings', (data) => {
   //хосты клансайту раз в сутки
   if (document.location.href.indexOf('Genesyx.aspx') !== -1 || document.location.href.indexOf('Frames.aspx') !== -1) {
     const date = localStorage.getItem('genesyx-helper-counters-date');
-    const today = moment().format('YYYY-DD-MM');
+    const today = moment.utc().add(3, 'h').format('YYYY-MM-DD');
     if (!date || date !== today) {
       localStorage.setItem('genesyx-helper-counters-date', today);
       const counters = document.createElement("iframe");
