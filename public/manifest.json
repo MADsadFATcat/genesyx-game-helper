@@ -1,7 +1,7 @@
 ﻿{
   "manifest_version": 2,
   "name": "Genesyx Game Helper",
-  "version": "2.0.8",
+  "version": "{tag}",
   "description": "Игровой помощник для браузерной игры https://www.genesyx.ru/",
   "browser_action": {
     "default_icon": {

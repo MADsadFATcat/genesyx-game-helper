@@ -1,0 +1,32 @@
+version: 2
+jobs:
+  deploy:
+    docker:
+      - image: circleci/node
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+      - run: npm i
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}      
+      - run: npm run build
+      - run: 'sed -i "s/{tag}/$(grep -oP "(?<=version\": \").*(?=\")" package.json)/g" ext/manifest.json'
+      - run: zip -r deploy.zip ext
+      - run: |
+          ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
+          curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T deploy.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
+          curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
+workflows:
+  version: 2
+  tagged-deploy:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only: master

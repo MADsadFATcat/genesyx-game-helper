@@ -432,7 +432,7 @@
             if (!tabs) {
               return;
             }
-            
+
             for (let i = 0; i < tabs.length; i++) {
               chrome.tabs.connect(tabs[i].id, {name: 'genesyx-game-helper'});
             }
