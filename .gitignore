@@ -3,7 +3,7 @@ node_modules
 /dist
 /ext
 *.zip
-*.mp3
+#*.mp3
 
 # local env files
 .env
