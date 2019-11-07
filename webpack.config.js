@@ -44,6 +44,7 @@ module.exports = {
     new CopyPlugin([
       {from: './dist/js/*.js', to: path.resolve(__dirname, './ext/js'), flatten: true},
       {from: './dist/css/*.css', to: path.resolve(__dirname, './ext/css'), flatten: true},
+      {from: './dist/fonts/*.*', to: path.resolve(__dirname, './ext/fonts'), flatten: true},
       {from: './dist/index.html', to: path.resolve(__dirname, './ext/html'), flatten: true},
       {from: './dist/manifest.json', to: path.resolve(__dirname, './ext'), flatten: true},
       {from: './dist/sounds/*.mp3', to: path.resolve(__dirname, './ext/sounds'), flatten: true},
