@@ -317,10 +317,6 @@
     }
   }
 
-  .v-card__title {
-    /*color: #F57C00 !important;*/
-  }
-
   label, input, .v-label {
     color: white !important;
     font-size: 12px !important;
