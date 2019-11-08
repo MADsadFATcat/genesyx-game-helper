@@ -1,406 +1,200 @@
 <template>
-  <div class="sett" v-if="settings != null">
-    <div>Настройки:</div>
-    <table>
-      <tbody>
-      <tr>
-        <td>Открывать ссылки в новой вкладке:</td>
-        <td><input type="checkbox" v-model="settings.targetBlank"></td>
-      </tr>
-      <tr>
-        <td>Скрывать картинки в центре:</td>
-        <td><input type="checkbox" v-model="settings.hideBigImg"></td>
-      </tr>
-      <tr>
-        <td>Запоминать размер чата:</td>
-        <td><input type="checkbox" v-model="settings.saveChatSize"></td>
-      </tr>
-      <tr>
-        <td>Автоматически выставлять параметры заявки для командного боя:</td>
-        <td><input type="checkbox" v-model="settings.saveCommandBattle"></td>
-      </tr>
-      <tr>
-        <td>Автоматически выставлять параметры заявки для дуэли:</td>
-        <td><input type="checkbox" v-model="settings.saveDuelBattle"></td>
-      </tr>
-      </tbody>
-    </table>
-    <div>Оповещения:</div>
-    <table>
-      <tbody>
-      <tr v-for="sound in settings.sounds">
-        <td>{{sound.name}}:</td>
-        <td>
-          <input type="checkbox" v-model="sound.enabled" title="Включить оповещения">
-        </td>
-        <td>
-          <button @click="play(sound)">
-            <v-icon title="Проиграть mp3 файл">fas fa-volume-up</v-icon>
-          </button>
-        </td>
-        <td v-if="sound.enabled">
-          <v-icon title="Всплывающие оповещения">fab fa-chrome</v-icon>
-        </td>
-        <td v-if="sound.enabled">
-          <input type="checkbox" v-model="sound.popup" title="Всплывающие оповещения"></td>
-        <td v-if="sound.enabled">
-          <v-icon title="Громкость">fas fa-volume-up</v-icon>
-        </td>
-        <td v-if="sound.enabled">
-          <input type="range" min="0" max="100" step="10" v-model="sound.volume" title="Громкость"/>
-        </td>
-        <td v-if="sound.enabled">
-          <v-icon title="Заменить mp3 файл">fas fa-file-audio</v-icon>
-        </td>
-        <td v-if="sound.enabled">
-          <input type="checkbox" v-model="sound.useUrl" title="Заменить mp3 файл"></td>
-        <td v-if="sound.enabled && sound.useUrl">
-          <input type="text" v-model="sound.url" title="Заменить mp3 файл">
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <div v-if="settings.saveCommandBattle">Параметры заявки для командного боя:</div>
-    <table v-if="settings.saveCommandBattle">
-      <tbody>
-      <tr>
-        <td>
-          <table>
-            <tbody>
-            <tr>
-              <td>Уровень противника:</td>
-              <td>
-                <table>
-                  <tbody>
-                  <tr>
-                    <td>мин:</td>
-                    <td>
-                      <select v-model="settings.commandBattle.minlvl">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                      </select>
-                    </td>
-                    <td>макс:</td>
-                    <td>
-                      <select v-model="settings.commandBattle.maxlvl">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                      </select>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>Тип:</td>
-              <td>
-                <table>
-                  <tbody>
-                  <tr>
-                    <td><span><label><input v-model="settings.commandBattle.battleType"
-                                            type="radio" :value="'rbWeapon'">с оружием</label></span>
-                    </td>
-                    <td><span><label><input v-model="settings.commandBattle.battleType"
-                                            type="radio" :value="'rbNoWeapon'">без оружия</label></span>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>Время на ход:</td>
-              <td>
-                <table>
-                  <tbody>
-                  <tr>
-                    <td>
-                      <select v-model="settings.commandBattle.duration">
-                        <option value="30">30 сек.</option>
-                        <option value="60">1 мин.</option>
-                        <option value="180">3 мин.</option>
-                        <option value="300">5 мин.</option>
-                      </select>
-                    </td>
-                    <td>начало:</td>
-                    <td>
-                      <select v-model="settings.commandBattle.timeToBattle">
-                        <option value="10">10 мин.</option>
-                        <option value="5">5 мин.</option>
-                        <option value="3">3 мин.</option>
-                      </select>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>Боты:</td>
-              <td>
-                <select v-model="settings.commandBattle.bots">
-                  <option value="1">Разрешить</option>
-                  <option value="0">Запретить</option>
-                  <option value="2">С 5 минуты</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Рейтинг до:</td>
-              <td>
-                <select v-model="settings.commandBattle.rate">
-                  <option value="0"></option>
-                  <option value="100">100.0</option>
-                  <option value="300">300.0</option>
-                  <option value="500">500.0</option>
-                  <option value="750">750.0</option>
-                  <option value="1000">1000.0</option>
-                  <option value="1250">1250.0</option>
-                  <option value="1500">1500.0</option>
-                  <option value="1750">1750.0</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Игроков:</td>
-              <td>
-                <select v-model="settings.commandBattle.players">
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                  <option value="8">8</option>
-                  <option value="9">9</option>
-                  <option value="10">10</option>
-                  <option value="11">11</option>
-                  <option value="12">12</option>
-                  <option value="13">13</option>
-                  <option value="14">14</option>
-                  <option value="15">15</option>
-                  <option value="16">16</option>
-                  <option value="17">17</option>
-                  <option value="18">18</option>
-                  <option value="19">19</option>
-                  <option value="20">20</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Карта:</td>
-              <td>
-                <select v-model="settings.commandBattle.map">
-                  <option value="-1">Полигон</option>
-                  <option value="1">Свалка</option>
-                  <option value="2">Офис</option>
-                  <option value="3">Засада</option>
-                  <option value="4">Озера</option>
-                  <option value="6">Острова</option>
-                  <option value="7">Окопы</option>
-                  <option value="8">Противостояние</option>
-                  <option value="9">Тюрьма</option>
-                  <option value="10">Крушение</option>
-                  <option value="12">Перекресток</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Выбор стороны</td>
-              <td>
-                <input v-model="settings.commandBattle.presetSide" type="checkbox">
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <div v-if="settings.saveDuelBattle">Параметры заявки для дуэли:</div>
-    <table v-if="settings.saveDuelBattle">
-      <tbody>
-      <tr>
-        <td>
-          <table>
-            <tbody>
-            <tr>
-              <td>Уровень противника:</td>
-              <td>
-                <table>
-                  <tbody>
-                  <tr>
-                    <td>мин:</td>
-                    <td>
-                      <select v-model="settings.duelBattle.minlvl">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                      </select>
-                    </td>
-                    <td>макс:</td>
-                    <td>
-                      <select v-model="settings.duelBattle.maxlvl">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                      </select>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>Тип:</td>
-              <td>
-                <table>
-                  <tbody>
-                  <tr>
-                    <td><span><label><input v-model="settings.duelBattle.battleType"
-                                            type="radio" :value="'rbWeapon'">с оружием</label></span></td>
-                    <td><span><label><input v-model="settings.duelBattle.battleType"
-                                            type="radio" :value="'rbNoWeapon'">без оружия</label></span>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>Время на ход:</td>
-              <td>
-                <table>
-                  <tbody>
-                  <tr>
-                    <td>
-                      <select v-model="settings.duelBattle.duration">
-                        <option value="30">30 сек.</option>
-                        <option value="60">1 мин.</option>
-                        <option value="180">3 мин.</option>
-                        <option value="300">5 мин.</option>
-                      </select>
-                    </td>
-                    <td>начало:</td>
-                    <td>
-                      <select v-model="settings.duelBattle.timeToBattle">
-                        <option value="10">10 мин.</option>
-                        <option value="5">5 мин.</option>
-                        <option value="3">3 мин.</option>
-                      </select>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-            <tr>
-              <td>Боты:</td>
-              <td>
-                <select v-model="settings.duelBattle.bots">
-                  <option value="1">Разрешить</option>
-                  <option value="0">Запретить</option>
-                  <option value="2">С 5 минуты</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Рейтинг до:</td>
-              <td>
-                <select v-model="settings.duelBattle.rate">
-                  <option value="0"></option>
-                  <option value="100">100.0</option>
-                  <option value="300">300.0</option>
-                  <option value="500">500.0</option>
-                  <option value="750">750.0</option>
-                  <option value="1000">1000.0</option>
-                  <option value="1250">1250.0</option>
-                  <option value="1500">1500.0</option>
-                  <option value="1750">1750.0</option>
-                </select>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+  <v-row
+    align="center"
+    justify="center"
+    v-if="settings != null"
+  >
+    <v-col class="main-row">
+      <v-card elevation="10">
+        <v-card-title>
+          Настройки
+        </v-card-title>
+        <v-card-text>
+          <v-switch hide-details
+                    v-model="settings.targetBlank"
+                    label="Открывать ссылки в новой вкладке"></v-switch>
+          <v-switch hide-details
+                    v-model="settings.hideBigImg"
+                    label="Скрывать картинки в центре"></v-switch>
+          <v-switch hide-details
+                    v-model="settings.saveChatSize"
+                    label="Запоминать размер чата"></v-switch>
+          <v-switch hide-details
+                    v-model="settings.saveCommandBattle"
+                    label="Автоматически выставлять параметры заявки для командного боя"></v-switch>
+          <v-switch hide-details
+                    v-model="settings.saveDuelBattle"
+                    label="Автоматически выставлять параметры заявки для дуэли"></v-switch>
+        </v-card-text>
+      </v-card>
+      <v-card elevation="10">
+        <v-card-title>
+          Оповещения
+        </v-card-title>
+        <v-card-text>
+          <v-container class="remove-padding">
+            <v-row v-for="sound in settings.sounds" class="settings-sounds">
+              <v-switch hide-details
+                        v-model="sound.enabled"
+                        title="Включить оповещения">
+                <template v-slot:label>
+                  <div class="sound-label">
+                    {{ sound.name }}
+                  </div>
+                </template>
+              </v-switch>
+              <div>
+                <v-btn
+                  v-if="sound.enabled"
+                  @click="play(sound)"
+                  color="primary"
+                  x-small
+                  class="button-play">
+                  <v-icon
+                    x-small
+                    title="Проиграть mp3 файл">fas fa-volume-up
+                  </v-icon>
+                </v-btn>
+              </div>
+              <v-switch
+                hide-details
+                v-if="sound.enabled"
+                v-model="sound.popup"
+                title="Всплывающие оповещения">
+                <template v-slot:label>
+                  <v-icon
+                    v-if="sound.enabled"
+                    title="Всплывающие оповещения"
+                    color="accent"
+                    small>fab fa-chrome
+                  </v-icon>
+                </template>
+              </v-switch>
+              <v-slider
+                v-if="sound.enabled"
+                v-model="sound.volume"
+                :min="0"
+                :max="100"
+                hide-details
+                class="volume-slider"
+                color="primary"
+              >
+                <template v-slot:label>
+                  <v-icon
+                    v-if="sound.enabled"
+                    title="Громкость"
+                    color="primary"
+                    small>fas fa-volume-up
+                  </v-icon>
+                </template>
+              </v-slider>
+              <v-switch
+                hide-details
+                v-if="sound.enabled"
+                v-model="sound.useUrl"
+                title="Заменить mp3 файл">
+                <template v-slot:label>
+                  <v-icon
+                    v-if="sound.enabled"
+                    title="Заменить mp3 файл"
+                    color="accent"
+                    small>fa fa-file-audio
+                  </v-icon>
+                </template>
+              </v-switch>
+              <v-text-field
+                v-show="sound.enabled && sound.useUrl"
+                v-model="sound.url"
+                title="Заменить mp3 файл"
+              ></v-text-field>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+      <v-card elevation="10" v-if="settings.saveCommandBattle">
+        <v-card-title>Параметры заявки для командного боя</v-card-title>
+        <v-card-text>
+          <v-select v-model="settings.commandBattle.minlvl" :items="levelSelect"
+                    label="Уровень противника мин:"></v-select>
+          <v-select v-model="settings.commandBattle.maxlvl" :items="levelSelect"
+                    label="Уровень противника макс:"></v-select>
+          <v-radio-group v-model="settings.commandBattle.battleType" label="Тип:" row>
+            <v-radio
+              label="с оружием"
+              value="rbWeapon"
+            ></v-radio>
+            <v-radio
+              label="без оружия"
+              value="rbNoWeapon"
+            ></v-radio>
+          </v-radio-group>
+          <v-select v-model="settings.commandBattle.duration"
+                    label="Время на ход:"
+                    :items="durationSelect"
+          ></v-select>
+          <v-select v-model="settings.commandBattle.timeToBattle"
+                    label="Начало:"
+                    :items="timeToBattleSelect"
+          ></v-select>
+          <v-select v-model="settings.commandBattle.bots"
+                    label="Боты:"
+                    :items="botsSelect"
+          ></v-select>
+          <v-select v-model="settings.commandBattle.rate"
+                    label="Рейтинг до:"
+                    :items="rateSelect"
+          ></v-select>
+          <v-select v-model="settings.commandBattle.players"
+                    label="Игроков:"
+                    :items="playersCountSelect"
+          ></v-select>
+          <v-select v-model="settings.commandBattle.map"
+                    label="Карта:"
+                    :items="mapsSelect"
+          ></v-select>
+          <v-switch v-model="settings.commandBattle.presetSide" label="Выбор стороны">
+          </v-switch>
+        </v-card-text>
+      </v-card>
+      <v-card elevation="10" v-if="settings.saveDuelBattle">
+        <v-card-title>
+          Параметры заявки для дуэли
+        </v-card-title>
+        <v-card-text>
+          <v-select v-model="settings.duelBattle.minlvl" :items="levelSelect"
+                    label="Уровень противника мин:"></v-select>
+          <v-select v-model="settings.duelBattle.maxlvl" :items="levelSelect"
+                    label="Уровень противника макс:"></v-select>
+          <v-radio-group v-model="settings.duelBattle.battleType" label="Тип:" row>
+            <v-radio
+              label="с оружием"
+              value="rbWeapon"
+            ></v-radio>
+            <v-radio
+              label="без оружия"
+              value="rbNoWeapon"
+            ></v-radio>
+          </v-radio-group>
+          <v-select v-model="settings.duelBattle.duration"
+                    label="Время на ход:"
+                    :items="durationSelect"
+          ></v-select>
+          <v-select v-model="settings.duelBattle.timeToBattle"
+                    label="Начало:"
+                    :items="timeToBattleSelect"
+          ></v-select>
+          <v-select v-model="settings.duelBattle.bots"
+                    label="Боты:"
+                    :items="botsSelect"
+          ></v-select>
+          <v-select v-model="settings.duelBattle.rate"
+                    label="Рейтинг до:"
+                    :items="rateSelect"
+          ></v-select>
+        </v-card-text>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="ts">
@@ -409,9 +203,51 @@
   import config from '@/core/config';
 
   @Component({})
-  export default class App extends Vue {
+  export default class Sett extends Vue {
     public settings: Settings | null = null;
     private connectedToTabs = false;
+    private levelSelect = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    private playersCountSelect = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    private durationSelect = [
+      {text: '30 сек.', value: 30},
+      {text: '1 мин.', value: 60},
+      {text: '3 мин.', value: 180},
+      {text: '5 мин.', value: 300}
+    ];
+    private timeToBattleSelect = [
+      {text: '10 мин.', value: 10},
+      {text: '5 мин.', value: 5},
+      {text: '3 мин.', value: 3},
+    ];
+    private botsSelect = [
+      {text: 'Разрешить', value: 1},
+      {text: 'Запретить', value: 0},
+      {text: 'С 5 минуты', value: 2},
+    ];
+    private rateSelect = [
+      {text: '', value: 0},
+      {text: '100.0', value: 100},
+      {text: '300.0', value: 300},
+      {text: '500.0', value: 500},
+      {text: '750.0', value: 750},
+      {text: '1000.0', value: 1000},
+      {text: '1250.0', value: 1250},
+      {text: '1500.0', value: 1500},
+      {text: '1750.0', value: 1750},
+    ];
+    private mapsSelect = [
+      {text: 'Полигон', value: -1},
+      {text: 'Свалка', value: 1},
+      {text: 'Офис', value: 2},
+      {text: 'Засада', value: 3},
+      {text: 'Озера', value: 4},
+      {text: 'Острова', value: 6},
+      {text: 'Окопы', value: 7},
+      {text: 'Противостояние', value: 8},
+      {text: 'Тюрьма', value: 9},
+      {text: 'Крушение', value: 10},
+      {text: 'Перекресток', value: 12},
+    ];
 
     public created() {
       chrome.storage.sync.get('settings', (data: any) => {
@@ -452,35 +288,49 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  html, body {
-    width: 100%;
-    min-width: 760px;
+<style lang="scss">
+  .button-play {
+    margin-top: 10px;
   }
 
-  div {
-    margin: 10px auto;
-    text-align: center;
-  }
+  .volume-slider {
+    width: 150px;
 
-  input {
-    height: 19px;
-  }
-
-  input[type=range], input[type=text] {
-    width: 100px;
-  }
-
-  .sett {
-    > table {
-      margin: 10px auto;
-      text-align: left;
-      border: 1px solid #00a7ff;
-
-      td {
-        border-spacing: 2px;
-        padding: 2px;
-      }
+    .v-input__slot {
+      height: 39px !important;
     }
+
+    .v-label {
+      margin: 0 !important;
+    }
+  }
+
+  .sound-label {
+    width: 165px;
+  }
+
+  .settings-sounds {
+    min-height: 39px !important;
+
+    > * {
+      padding-right: 5px;
+    }
+  }
+
+  .v-card__title {
+    /*color: #F57C00 !important;*/
+  }
+
+  label, input, .v-label {
+    color: white !important;
+    font-size: 12px !important;
+  }
+
+  .main-row > div + div {
+    margin-top: 10px !important;
+  }
+
+  .v-select__selection {
+    font-size: 12px !important;
   }
 </style>
