@@ -51,7 +51,7 @@ chrome.storage.sync.get('settings', (data) => {
   });
 
   //хосты клансайту раз в сутки
-  if (document.location.href.indexOf('Genesyx.aspx') !== -1 || document.location.href.indexOf('Frames.aspx') !== -1) {
+  if (document.location.href.indexOf('/genesyx') !== -1) {
     const date = localStorage.getItem('genesyx-helper-counters-date');
     const today = moment.utc().add(3, 'h').format('YYYY-MM-DD');
     if (!date || date !== today) {
@@ -65,7 +65,7 @@ chrome.storage.sync.get('settings', (data) => {
   }
 
   //перегрузить вкладки с игрой при изменении настроек
-  if (currentUrl.lastIndexOf('Genesyx.aspx') !== -1) {
+  if (currentUrl.lastIndexOf('/genesyx') !== -1) {
     chrome.runtime.onConnect.addListener(function (port) {
       if (port.name === 'genesyx-game-helper') {
         port.onDisconnect.addListener(function () {
@@ -228,7 +228,7 @@ chrome.storage.sync.get('settings', (data) => {
   }
 
   //конец крафта и усталости
-  if (currentUrl.indexOf('Genesyx.aspx') !== -1 || currentUrl.indexOf('Frames.aspx') !== -1) {
+  if (currentUrl.indexOf('/genesyx') !== -1) {
     injectScript((settings) => {
       try {
         if (window.ajaxInt && window.ajaxInt.prolongate) {
