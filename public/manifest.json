@@ -28,11 +28,17 @@
   "options_page": "html/index.html",
   "content_scripts": [
     {
-      "matches": [ "*://genesyx.ru/*", "*://www.genesyx.ru/*", "*://genesyx.com/*", "*://www.genesyx.com/*" ],
+      "matches": [
+        "https://www.genesyx.ru/*"
+      ],
       "all_frames": true,
       "run_at": "document_idle",
-      "js": [ "js/content_script.js" ],
-      "css": [ "css/content_styles.css" ]
+      "js": [
+        "js/content_script.js"
+      ],
+      "css": [
+        "css/content_styles.css"
+      ]
     }
   ],
   "web_accessible_resources": [
@@ -40,8 +46,6 @@
   ],
   "permissions": [
     "storage",
-    "tabs",
-    "notifications",
-    "alarms"
+    "notifications"
   ]
 }

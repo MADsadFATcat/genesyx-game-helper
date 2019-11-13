@@ -200,12 +200,10 @@
 <script lang="ts">
   import {Component, Vue, Watch} from 'vue-property-decorator';
   import Settings from '@/core/settings';
-  import config from '@/core/config';
 
   @Component({})
   export default class Sett extends Vue {
     public settings: Settings | null = null;
-    private connectedToTabs = false;
     private levelSelect = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     private playersCountSelect = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     private durationSelect = [
@@ -262,19 +260,6 @@
     public save() {
       chrome.storage.sync.set({settings: this.settings}, () => {
         console.log('settings saved', this.settings);
-
-        if (!this.connectedToTabs) {
-          chrome.tabs.query({url: config.gameUrls}, (tabs: any) => {
-            if (!tabs) {
-              return;
-            }
-
-            for (let i = 0; i < tabs.length; i++) {
-              chrome.tabs.connect(tabs[i].id, {name: 'genesyx-game-helper'});
-            }
-          });
-          this.connectedToTabs = true;
-        }
       });
     }
 
