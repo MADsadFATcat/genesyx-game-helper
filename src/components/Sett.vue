@@ -199,6 +199,7 @@
 
 <script lang="ts">
   import {Component, Vue, Watch} from 'vue-property-decorator';
+  import _ from 'lodash';
   import Settings from '@/core/settings';
 
   @Component({})
@@ -249,10 +250,8 @@
 
     public created() {
       chrome.storage.sync.get('settings', (data: any) => {
-        if (data && data.settings) {
-          this.settings = data.settings;
-          console.log('settings loaded', this.settings);
-        }
+        this.settings = _.defaultsDeep(data.settings, new Settings());
+        console.log('settings loaded', this.settings);
       });
     }
 

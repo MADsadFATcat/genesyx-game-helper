@@ -3,11 +3,6 @@ import timersTemplate from './timers.html';
 
 const currentUrl = document.location.href;
 
-function reloadPage() {
-  // noinspection SillyAssignmentJS
-  document.location.href = document.location.href;
-}
-
 function injectScript(func, context) {
   const inject = document.createElement('script');
   inject.setAttribute('type', 'application/javascript');
@@ -22,7 +17,7 @@ window.addEventListener('message', function (event) {
   if (event.source !== window)
     return;
 
-  if (event.data.type && (event.data.type === 'genesyx-game-helper-popup')) {
+  if (event.data.type === 'genesyx-game-helper-popup') {
     chrome.runtime.sendMessage({popup: event.data.popup, title: event.data.title}, () => {
     });
   }
@@ -56,23 +51,12 @@ chrome.storage.sync.get('settings', (data) => {
     const today = moment.utc().add(3, 'h').format('YYYY-MM-DD');
     if (!date || date !== today) {
       localStorage.setItem('genesyx-helper-counters-date', today);
-      const counters = document.createElement("iframe");
-      counters.style.position = "absolute";
-      counters.style.display = "none";
+      const counters = document.createElement('iframe');
+      counters.style.position = 'absolute';
+      counters.style.display = 'none';
       counters.src = 'https://evolution-genesyx.ml/';
       document.body.appendChild(counters);
     }
-  }
-
-  //перегрузить вкладки с игрой при изменении настроек
-  if (currentUrl.lastIndexOf('/genesyx') !== -1) {
-    chrome.runtime.onConnect.addListener(function (port) {
-      if (port.name === 'genesyx-game-helper') {
-        port.onDisconnect.addListener(function () {
-          reloadPage();
-        });
-      }
-    });
   }
 
   //открывать ссылки в новой вкладке а не окне
@@ -164,7 +148,7 @@ chrome.storage.sync.get('settings', (data) => {
   }
 
   //оповещения о привате и системных сообщениях
-  if ((settings.sounds.private.enabled || settings.sounds.system.enabled) && currentUrl.indexOf('Chat.aspx') !== -1) {
+  if ((settings.sounds.private.enabled || settings.sounds.system.enabled || settings.sounds.clan.enabled) && currentUrl.indexOf('Chat.aspx') !== -1) {
     injectScript((settings) => {
       try {
         window.ChatMessagesJSONtoHTMLOriginal = window.ChatMessagesJSONtoHTML;
@@ -173,11 +157,15 @@ chrome.storage.sync.get('settings', (data) => {
           if (window.lastMessage) {
             for (let i = json.length - 1; i >= 0; i--) {
               if (settings.sounds.private.enabled && json[i].RMT === 2 && json[i].MPID !== json[i].PID) {
-                settings.sounds.private.popup && window.gameHelperShowPopup('private', settings.sounds['private'].name);
+                settings.sounds.private.popup && window.gameHelperShowPopup('private', settings.sounds.private.name);
                 window.gameHelperPlaySound(settings.sounds.private.useUrl ? settings.sounds.private.url : settings.sounds.private.defUrl, settings.sounds.private.volume / 100);
               }
+              if (settings.sounds.clan.enabled && json[i].RMT === 5) {
+                settings.sounds.clan.popup && window.gameHelperShowPopup('clan', settings.sounds.clan.name);
+                window.gameHelperPlaySound(settings.sounds.clan.useUrl ? settings.sounds.clan.url : settings.sounds.clan.defUrl, settings.sounds.clan.volume / 100);
+              }
               if (settings.sounds.system.enabled && json[i].RMT === 6) {
-                settings.sounds.system.popup && window.gameHelperShowPopup('system', settings.sounds['system'].name);
+                settings.sounds.system.popup && window.gameHelperShowPopup('system', settings.sounds.system.name);
                 window.gameHelperPlaySound(settings.sounds.system.useUrl ? settings.sounds.system.url : settings.sounds.system.defUrl, settings.sounds.system.volume / 100);
               }
             }
@@ -197,10 +185,26 @@ chrome.storage.sync.get('settings', (data) => {
       try {
         window.setTimeout(function () {
           if (window.battle && window.battle.isBattleMode) {
-            settings.sounds.battle.popup && window.gameHelperShowPopup('battle', settings.sounds['battle'].name);
+            settings.sounds.battle.popup && window.gameHelperShowPopup('battle', settings.sounds.battle.name);
             window.gameHelperPlaySound(settings.sounds.battle.useUrl ? settings.sounds.battle.url : settings.sounds.battle.defUrl, settings.sounds.battle.volume / 100);
           }
         }, 3000);
+      } catch (e) {
+        console.error('genesyx-game-helper', e);
+      }
+    }, settings);
+  }
+
+  //напоминание сделать ход
+  if (settings.sounds.freeze.enabled && currentUrl.indexOf('Battle.aspx') !== -1 && currentUrl.indexOf('com') === -1) {
+    injectScript((settings) => {
+      try {
+        window.setInterval(function () {
+          if ($('.battle-timer #timer0').html() === '00:15' && $('#divPunchBlockEnabled').css('display') === 'block') {
+            settings.sounds.freeze.popup && window.gameHelperShowPopup('freeze', settings.sounds.freeze.name);
+            window.gameHelperPlaySound(settings.sounds.freeze.useUrl ? settings.sounds.freeze.url : settings.sounds.freeze.defUrl, settings.sounds.freeze.volume / 100);
+          }
+        }, 1000);
       } catch (e) {
         console.error('genesyx-game-helper', e);
       }
@@ -217,7 +221,7 @@ chrome.storage.sync.get('settings', (data) => {
           let oldGameHelperIsFullHealthAndEnergy = window.gameHelperIsFullHealthAndEnergy;
           window.gameHelperIsFullHealthAndEnergy = Number($('#spEnergy').html()) === Number($('#spEnergy1').html()) && Number($('#spHealth').html()) === Number($('#spHealth1').html());
           if (!oldGameHelperIsFullHealthAndEnergy && window.gameHelperIsFullHealthAndEnergy) {
-            settings.sounds.hp.popup && window.gameHelperShowPopup('hp', settings.sounds['hp'].name);
+            settings.sounds.hp.popup && window.gameHelperShowPopup('hp', settings.sounds.hp.name);
             window.gameHelperPlaySound(settings.sounds.hp.useUrl ? settings.sounds.hp.url : settings.sounds.hp.defUrl, settings.sounds.hp.volume / 100);
           }
         }, 3000);
@@ -243,7 +247,7 @@ chrome.storage.sync.get('settings', (data) => {
             }
             if (data.craftTime && data.craftTime === '00:00') {
               if (settings.sounds.endwork.enabled && window.gameHelperCraftInProgress) {
-                settings.sounds.endwork.popup && window.gameHelperShowPopup('endwork', settings.sounds['endwork'].name);
+                settings.sounds.endwork.popup && window.gameHelperShowPopup('endwork', settings.sounds.endwork.name);
                 window.gameHelperPlaySound(settings.sounds.endwork.useUrl ? settings.sounds.endwork.url : settings.sounds.endwork.defUrl, settings.sounds.endwork.volume / 100);
               }
               window.gameHelperCraftInProgress = false;
@@ -254,7 +258,7 @@ chrome.storage.sync.get('settings', (data) => {
             }
             if (data.craftTired && data.craftTired === '00:00') {
               if (window.gameHelperCraftTiredInProgress && settings.sounds.endtired.enabled) {
-                settings.sounds.endtired.popup && window.gameHelperShowPopup('endtired', settings.sounds['endtired'].name);
+                settings.sounds.endtired.popup && window.gameHelperShowPopup('endtired', settings.sounds.endtired.name);
                 window.gameHelperPlaySound(settings.sounds.endtired.useUrl ? settings.sounds.endtired.url : settings.sounds.endtired.defUrl, settings.sounds.endtired.volume / 100);
               }
               window.gameHelperCraftTiredInProgress = false;
@@ -303,7 +307,7 @@ chrome.storage.sync.get('settings', (data) => {
             totalSec = totalSec - 1;
             if (totalSec < 0) {
               clearInterval(window.gameHelperTimerInterval);
-              settings.sounds.custom.popup && window.gameHelperShowPopup('custom', settings.sounds['custom'].name);
+              settings.sounds.custom.popup && window.gameHelperShowPopup('custom', settings.sounds.custom.name);
               window.gameHelperPlaySound(settings.sounds.custom.useUrl ? settings.sounds.custom.url : settings.sounds.custom.defUrl, settings.sounds.custom.volume / 100);
             } else {
               min = Math.floor(totalSec / 60);
