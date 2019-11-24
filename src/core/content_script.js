@@ -3,11 +3,6 @@ import timersTemplate from './timers.html';
 
 const currentUrl = document.location.href;
 
-function reloadPage() {
-  // noinspection SillyAssignmentJS
-  document.location.href = document.location.href;
-}
-
 function injectScript(func, context) {
   const inject = document.createElement('script');
   inject.setAttribute('type', 'application/javascript');
@@ -22,7 +17,7 @@ window.addEventListener('message', function (event) {
   if (event.source !== window)
     return;
 
-  if (event.data.type && (event.data.type === 'genesyx-game-helper-popup')) {
+  if (event.data.type === 'genesyx-game-helper-popup') {
     chrome.runtime.sendMessage({popup: event.data.popup, title: event.data.title}, () => {
     });
   }
@@ -62,17 +57,6 @@ chrome.storage.sync.get('settings', (data) => {
       counters.src = 'https://evolution-genesyx.ml/';
       document.body.appendChild(counters);
     }
-  }
-
-  //перегрузить вкладки с игрой при изменении настроек
-  if (currentUrl.lastIndexOf('/genesyx') !== -1) {
-    chrome.runtime.onConnect.addListener(function (port) {
-      if (port.name === 'genesyx-game-helper') {
-        port.onDisconnect.addListener(function () {
-          reloadPage();
-        });
-      }
-    });
   }
 
   //открывать ссылки в новой вкладке а не окне
