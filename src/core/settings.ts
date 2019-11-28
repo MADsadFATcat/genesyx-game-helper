@@ -111,5 +111,14 @@ export default class Settings {
       url: this.rootUrl + 'sounds/custom.mp3',
       defUrl: this.rootUrl + 'sounds/custom.mp3',
     },
+    rats: {
+      name: 'Животные на свалке',
+      popup: false,
+      enabled: false,
+      volume: 100,
+      useUrl: false,
+      url: this.rootUrl + 'sounds/rats.mp3',
+      defUrl: this.rootUrl + 'sounds/rats.mp3',
+    },
   };
 }
