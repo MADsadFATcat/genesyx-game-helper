@@ -6,6 +6,18 @@
   >
     <v-col class="main-row">
       <v-card elevation="10">
+        <v-card-text>
+          <v-row align="center"
+                 justify="center">
+            <v-btn
+              color="primary"
+              target="_blank"
+              href="https://t.me/genesyx_helper_bot">Телеграм бот
+            </v-btn>
+          </v-row>
+        </v-card-text>
+      </v-card>
+      <v-card elevation="10">
         <v-card-title>
           Настройки
         </v-card-title>
@@ -211,7 +223,7 @@
       {text: '30 сек.', value: 30},
       {text: '1 мин.', value: 60},
       {text: '3 мин.', value: 180},
-      {text: '5 мин.', value: 300}
+      {text: '5 мин.', value: 300},
     ];
     private timeToBattleSelect = [
       {text: '10 мин.', value: 10},

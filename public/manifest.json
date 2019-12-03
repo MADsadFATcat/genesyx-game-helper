@@ -48,5 +48,10 @@
     "storage",
     "notifications",
     "alarms"
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{542c25da-977a-4f6a-aa0b-9d4812122df0}"
+    }
+  }
 }

@@ -13,7 +13,7 @@ export default new Vuetify({
         primary: '#028090',
         accent: '#00a896',
       },
-    }
+    },
   },
   icons: {
     iconfont: 'fa',
