@@ -15,7 +15,7 @@
   @Component({
     components: {
       Sett,
-    }
+    },
   })
   export default class App extends Vue {
   }
