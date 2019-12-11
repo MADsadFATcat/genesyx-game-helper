@@ -32,6 +32,9 @@
                     v-model="settings.saveChatSize"
                     label="Запоминать размер чата"></v-switch>
           <v-switch hide-details
+                    v-model="settings.highlightBattleRequest"
+                    label="Подсвечивать заявку на командный бой с плохими параметрами."></v-switch>
+          <v-switch hide-details
                     v-model="settings.saveCommandBattle"
                     label="Автоматически выставлять параметры заявки для командного боя"></v-switch>
           <v-switch hide-details

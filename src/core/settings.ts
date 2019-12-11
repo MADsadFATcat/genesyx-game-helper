@@ -5,6 +5,7 @@ export default class Settings {
   public saveChatSize = false;
   public saveCommandBattle = false;
   public saveDuelBattle = false;
+  public highlightBattleRequest = false;
 
   public commandBattle = {
     minlvl: 0,
