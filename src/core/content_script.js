@@ -128,6 +128,30 @@ chrome.storage.sync.get('settings', (data) => {
     }, settings);
   }
 
+  //Подсвечивать заявку на командный бой с плохими параметрами.
+  if (settings.highlightBattleRequest && currentUrl.indexOf('BattleField.aspx?LocationID=3&BattleTypeID=2') !== -1) {
+    injectScript((settings) => {
+      try {
+        $('#dlBattles table.darkbody').each((i, t) => {
+          const time = $('td.whitetext:contains(Уровень) span:eq(4)', t);
+          if (time.html().indexOf('1') === -1) {
+            time.attr('style', 'background-color: red !important; color: white !important;');
+          }
+          const bots = $('td.whitetext:contains(Уровень) span:eq(5)', t);
+          if (bots.html().indexOf('запрещены') === -1) {
+            bots.attr('style', 'background-color: red !important; color: white !important;');
+          }
+          const weaponType = $('td.whitetext:contains(Уровень) span:eq(6)', t);
+          if (weaponType.html().indexOf('с оружием') === -1) {
+            weaponType.attr('style', 'background-color: red !important; color: white !important;');
+          }
+        })
+      } catch (e) {
+        console.error('genesyx-game-helper', e);
+      }
+    }, settings);
+  }
+
   //автоматически выставлять параметры заявки для дуэли
   if (settings.saveDuelBattle
     && currentUrl.indexOf('BattleField.aspx?LocationID=3') !== -1
