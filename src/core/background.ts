@@ -66,9 +66,9 @@ chrome.alarms.onAlarm.addListener((alarm: any) => {
             return;
           }
 
-          if ((n.notificationType === 2 || n.notificationType === 3)) {
+          if ((n.type === 2 || n.type === 3 || n.type === 4)) {
             if (settings.sounds.rats.enabled && settings.sounds.rats.popup) {
-              chrome.notifications.create('notification' + n.id,
+              chrome.notifications.create('notification' + n._id,
                 {
                   type: 'basic',
                   title: n.title,
@@ -88,7 +88,7 @@ chrome.alarms.onAlarm.addListener((alarm: any) => {
               audio.load();
             }
           } else {
-            chrome.notifications.create('notification' + n.id,
+            chrome.notifications.create('notification' + n._id,
               {
                 type: 'basic',
                 title: n.title,
