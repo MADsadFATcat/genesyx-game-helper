@@ -62,7 +62,7 @@ chrome.alarms.onAlarm.addListener((alarm: any) => {
 
         _.each(r.data, (n: any) => {
 
-          if (firedNotifications.indexOf(n.id) !== -1) {
+          if (firedNotifications.indexOf(n._id) !== -1) {
             return;
           }
 
@@ -100,7 +100,7 @@ chrome.alarms.onAlarm.addListener((alarm: any) => {
               });
           }
 
-          firedNotifications.push(n.id);
+          firedNotifications.push(n._id);
         });
 
         localStorage.setItem('genesyx-helper-notifications', firedNotifications.join(','));
