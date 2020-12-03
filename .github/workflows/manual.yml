@@ -1,0 +1,39 @@
+name: Manual workflow
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - v*
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install packages
+      run: npm ci
+    
+    - name: Install web-ext
+      run: npm i -g web-ext
+    
+    - name: Build
+      run: npm run build
+    
+    - name: Set extension version
+      run: |
+        EXT_VERSION=$(grep -oP "(?<=version\": \").*(?=\")" package.json)        
+        sed -i "s/1.0.0/${EXT_VERSION}/g" ext/manifest.json
+        echo "EXT_VERSION=${EXT_VERSION}" >> $GITHUB_ENV
+    
+    - name: Zip package
+      run: |
+        cd ext
+        ls -la
+        web-ext build
+    
+    - name: Sign package
+      run: |
+        cd web-ext-artifacts
+        ls -la
+        web-ext sign
