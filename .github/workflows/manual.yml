@@ -15,7 +15,7 @@ jobs:
       run: npm ci
     
     - name: Install web-ext
-      run: npm i -g web-ext
+      run: sudo npm i -g web-ext
     
     - name: Build
       run: npm run build
