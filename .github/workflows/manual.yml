@@ -31,9 +31,14 @@ jobs:
         cd ext
         ls -la
         web-ext build
+        
+    - uses: actions/upload-artifact@v2
+      with:
+        name: package
+        path: ext/web-ext-artifacts/*.zip
     
     - name: Sign package
       run: |
-        cd web-ext-artifacts
+        cd ext/web-ext-artifacts
         ls -la
         web-ext sign
