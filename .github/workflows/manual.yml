@@ -25,17 +25,18 @@ jobs:
         EXT_VERSION=$(grep -oP "(?<=version\": \").*(?=\")" package.json)        
         sed -i "s/1.0.0/${EXT_VERSION}/g" ext/manifest.json
         echo "EXT_VERSION=${EXT_VERSION}" >> $GITHUB_ENV
+        
+    - uses: actions/upload-artifact@v2
+      with:
+        name: genesyx-game-helper-${{ $EXT_VERSION }}
+        path: ext/
     
     - name: Zip package
       run: |
         cd ext
         web-ext build
-        
-    - uses: actions/upload-artifact@v2
-      with:
-        path: ext/web-ext-artifacts/*.zip
     
     - name: Sign package
       run: |
-        cd ext/web-ext-artifacts
+        cd ext
         web-ext sign --api-key=$AMO_JWT_ISSUER --api-secret=$AMO_JWT_SECRET
