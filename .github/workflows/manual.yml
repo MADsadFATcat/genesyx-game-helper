@@ -28,7 +28,7 @@ jobs:
         
     - uses: actions/upload-artifact@v2
       with:
-        name: genesyx-game-helper-${{ $EXT_VERSION }}
+        name: genesyx-game-helper-${{ env.EXT_VERSION }}
         path: ext/
     
     - name: Zip package
