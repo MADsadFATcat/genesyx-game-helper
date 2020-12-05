@@ -23,7 +23,12 @@ jobs:
         EXT_VERSION=$(grep -oP "(?<=version\": \").*(?=\")" package.json)        
         sed -i "s/1.0.0/${EXT_VERSION}/g" ext/manifest.json
         echo "EXT_VERSION=${EXT_VERSION}" >> $GITHUB_ENV
-    
+            
+    - name: Zip package
+      run: |
+        cd ext/
+        web-ext build
+            
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -45,11 +50,6 @@ jobs:
         asset_path: ext/web-ext-artifacts/genesyx_game_helper-${{ env.EXT_VERSION }}.zip
         asset_name: genesyx_game_helper-${{ env.EXT_VERSION }}.zip
         asset_content_type: application/zip
-            
-    - name: Zip package
-      run: |
-        cd ext/
-        web-ext build
     
     - name: Upload package to Mozilla Firefox
       run: |
