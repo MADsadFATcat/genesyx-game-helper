@@ -1,8 +1,6 @@
 name: Manual workflow
 on:
   push:
-    branches:
-      - master
     tags:
       - v*
 jobs:
@@ -33,13 +31,17 @@ jobs:
     
     - name: Zip package
       run: |
-        cd ext
+        cd ext/
         web-ext build
     
-    - name: Sign package
+    - name: Upload package to Mozilla Firefox
       run: |
-        cd ext
-        web-ext sign --api-key=$AMO_JWT_ISSUER --api-secret=$AMO_JWT_SECRET
-      env:
-        AMO_JWT_ISSUER: ${{ secrets.AMO_JWT_ISSUER }}
-        AMO_JWT_SECRET: ${{ secrets.AMO_JWT_SECRET }}
+        cd ext/
+        web-ext sign --api-key=${{ secrets.AMO_JWT_ISSUER }} --api-secret=${{ secrets.AMO_JWT_SECRET }}
+        
+    - name: Upload package to Google Chrome
+      run: |
+        cd ext/web-ext-artifacts/
+        ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${{ secrets.GOOGLE_CLIENT_ID }}&client_secret=${{ secrets.GOOGLE_CLIENT_SECRET }}&refresh_token=${{ secrets.GOOGLE_REFRESH_TOKEN }}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
+        curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T genesyx_game_helper-${{ env.EXT_VERSION }}.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${{ secrets.GOOGLE_EXTENSION_APP_ID }}"
+        curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${{ secrets.GOOGLE_EXTENSION_APP_ID }}/publish"
