@@ -1,5 +1,5 @@
 # Genesyx Game Helper
-
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/madsadfatcat/genesyx-game-helper/Manual%20workflow)  
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/iclnmbgdedngcclmfjpkfjljakllneij)](https://chrome.google.com/webstore/detail/genesyx-game-helper/iclnmbgdedngcclmfjpkfjljakllneij)
 [![Chrome Web Store](https://img.shields.io/chrome-web-store/users/iclnmbgdedngcclmfjpkfjljakllneij)](https://chrome.google.com/webstore/detail/genesyx-game-helper/iclnmbgdedngcclmfjpkfjljakllneij)  
 [![Mozilla Add-on](https://img.shields.io/amo/v/{542c25da-977a-4f6a-aa0b-9d4812122df0})](https://addons.mozilla.org/ru/firefox/addon/genesyx-game-helper/)
