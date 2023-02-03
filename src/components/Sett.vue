@@ -48,7 +48,7 @@
         </v-card-title>
         <v-card-text>
           <v-container class="remove-padding">
-            <v-row v-for="sound in settings.sounds" class="settings-sounds">
+            <v-row v-for="sound in settings.sounds" :key="sound.name" class="settings-sounds">
               <v-switch hide-details
                         v-model="sound.enabled"
                         title="Включить оповещения">

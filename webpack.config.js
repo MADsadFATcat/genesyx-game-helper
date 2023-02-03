@@ -33,7 +33,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ],
+    extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
     new CleanWebpackPlugin({
@@ -41,14 +41,17 @@ module.exports = {
       cleanOnceBeforeBuildPatterns: ['**/*', '../css/*'],
       dangerouslyAllowCleanPatternsOutsideProject: true
     }),
-    new CopyPlugin([
-      {from: './dist/js/*.js', to: path.resolve(__dirname, './ext/js'), flatten: true},
-      {from: './dist/css/*.css', to: path.resolve(__dirname, './ext/css'), flatten: true},
-      {from: './dist/fonts/*.*', to: path.resolve(__dirname, './ext/fonts'), flatten: true},
-      {from: './dist/index.html', to: path.resolve(__dirname, './ext/html'), flatten: true},
-      {from: './dist/manifest.json', to: path.resolve(__dirname, './ext'), flatten: true},
-      {from: './dist/sounds/*.mp3', to: path.resolve(__dirname, './ext/sounds'), flatten: true},
-      {from: './dist/img/*.png', to: path.resolve(__dirname, './ext/img'), flatten: true},
-    ]),
+    new CopyPlugin({
+      patterns:
+        [
+          {from: './dist/js/*.js', to: path.resolve(__dirname, './ext/js', '[name][ext]')},
+          {from: './dist/css/*.css', to: path.resolve(__dirname, './ext/css', '[name][ext]')},
+          {from: './dist/fonts/*.*', to: path.resolve(__dirname, './ext/fonts', '[name][ext]')},
+          {from: './dist/index.html', to: path.resolve(__dirname, './ext/html', '[name][ext]')},
+          {from: './dist/manifest.json', to: path.resolve(__dirname, './ext', '[name][ext]')},
+          {from: './dist/sounds/*.mp3', to: path.resolve(__dirname, './ext/sounds', '[name][ext]')},
+          {from: './dist/img/*.png', to: path.resolve(__dirname, './ext/img', '[name][ext]')},
+        ]
+    }),
   ],
 };

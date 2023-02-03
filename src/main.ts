@@ -6,7 +6,8 @@ import 'roboto-fontface/css/roboto/roboto-fontface.css';
 Vue.config.productionTip = false;
 
 new Vue({
-  // @ts-ignore
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
   vuetify,
   render: (h) => h(App),
 }).$mount('#app');
