@@ -51,11 +51,11 @@ jobs:
         asset_name: genesyx_game_helper-${{ env.EXT_VERSION }}.zip
         asset_content_type: application/zip
     
-    - name: Upload package to Mozilla Firefox
-      run: |
-        cd ext/
-        web-ext sign --api-key=${{ secrets.AMO_JWT_ISSUER }} --api-secret=${{ secrets.AMO_JWT_SECRET }}
-      continue-on-error: true
+    #- name: Upload package to Mozilla Firefox
+    #  run: |
+    #    cd ext/
+    #    web-ext sign --api-key=${{ secrets.AMO_JWT_ISSUER }} --api-secret=${{ secrets.AMO_JWT_SECRET }}
+    #  continue-on-error: true
         
     - name: Upload package to Google Chrome
       run: |
