@@ -1,7 +1,8 @@
 name: Deploy workflow
 on:
   push:
-    branches: [ "master" ]
+    tags:
+      - '*'
 
 jobs:
   build:
